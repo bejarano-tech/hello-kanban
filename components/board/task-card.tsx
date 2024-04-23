@@ -7,19 +7,18 @@ import {
   CardTitle,
 } from "../ui/card";
 
-const TaskCard = () => {
+interface TaskCardProps {
+  name: string,
+  description: string
+}
+
+const TaskCard = ({ name, description }: TaskCardProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        <CardTitle>{name}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
-      </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter>
     </Card>
   );
 };
