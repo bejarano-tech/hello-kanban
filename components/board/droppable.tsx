@@ -1,9 +1,16 @@
+"use client"
 import {useDroppable} from '@dnd-kit/core';
 
-export const Droppable = (props) => {
+interface DroppableProps {
+  children: React.ReactNode
+  id: string
+}
+
+export const Droppable = ({ children, id }: DroppableProps) => {
   const {isOver, setNodeRef} = useDroppable({
-    id: 'droppable',
+    id,
   });
+
   const style = {
     color: isOver ? 'green' : undefined,
   };
@@ -11,7 +18,8 @@ export const Droppable = (props) => {
   
   return (
     <div ref={setNodeRef} style={style}>
-      {props.children}
+      <p>{id}</p>
+      {children}
     </div>
   );
 }
