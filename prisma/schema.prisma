@@ -38,10 +38,18 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+model Column {
+  id        String    @id @default(cuid())
+  title     String
+  tasks     Task[]
+}
+
 model Task {
   id                      String                  @id @default(cuid())
   name                    String
   description             String
+  columnId                String
+  column                  Column  @relation(fields: [columnId], references: [id])
 }
 
 model VerificationToken {
