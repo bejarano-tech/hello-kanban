@@ -1,10 +1,9 @@
 import { BoardComponent } from "@/components/board/board-component";
-import { getTasks } from "@/data/task";
-import { Task } from "@prisma/client";
+import { getColumns } from "@/data/column";
 
 export default async function Board() {
-  const tasks = await getTasks()
+  const columns = await getColumns()
   return (
-    <BoardComponent tasks={tasks as Task[]}/>
+    <BoardComponent columns={columns}/>
   );
 }
