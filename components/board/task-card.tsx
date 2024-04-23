@@ -1,3 +1,5 @@
+import {CSS} from '@dnd-kit/utilities';
+import { useSortable } from "@dnd-kit/sortable";
 import {
   Card,
   CardContent,
@@ -8,13 +10,27 @@ import {
 } from "../ui/card";
 
 interface TaskCardProps {
-  name: string,
+  id: string
+  name: string
   description: string
 }
 
-const TaskCard = ({ name, description }: TaskCardProps) => {
+const TaskCard = ({ id, name, description }: TaskCardProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   return (
-    <Card>
+    <Card ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <CardHeader>
         <CardTitle>{name}</CardTitle>
         <CardDescription>{description}</CardDescription>
