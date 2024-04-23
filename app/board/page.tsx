@@ -1,9 +1,10 @@
 import { BoardComponent } from "@/components/board/board-component";
 import { getColumns } from "@/data/column";
+import { getTasks } from "@/data/task";
 
 export default async function Board() {
-  const columns = await getColumns()
+  const columns = await getColumns() || []
   return (
-    <BoardComponent columns={columns}/>
+    <BoardComponent columns={columns} />
   );
 }
