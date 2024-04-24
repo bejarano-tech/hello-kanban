@@ -1,11 +1,11 @@
 import { ColumnWithTasks } from "@/data/column";
 import { Draggable } from "react-beautiful-dnd";
+import { TaskList } from "./TaskList";
 
 interface ColumnProps {
   column: ColumnWithTasks;
   index: number;
 }
-
 export const Column = ({ column, index }: ColumnProps) => {
   return (
     <Draggable key={index} draggableId={column.title} index={index}>
@@ -25,6 +25,7 @@ export const Column = ({ column, index }: ColumnProps) => {
               {column.title}
             </h4>
           </div>
+          <TaskList listId={column.title} listType="TASK" tasks={column.tasks} internalScroll />
         </div>
       )}
     </Draggable>
