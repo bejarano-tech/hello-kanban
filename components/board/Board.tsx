@@ -1,17 +1,30 @@
 "use client";
 
-import { ColumnWithTasks } from "@/data/column";
+import { ColumnType, ColumnWithTasks } from "@/data/column";
 import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import { Column } from "./column";
-import { useState } from "react";
-import { updateColumnOrderAction, updateTaskOrderAction } from "@/actions/order";
+import { useEffect, useState } from "react";
+import {
+  updateColumnOrderAction,
+  updateTaskOrderAction,
+} from "@/actions/order";
+import { Button } from "../ui/button";
+import { NewColumnModal } from "./new-column-modal";
+import { createNewColumnAction } from "@/actions/column";
 
 interface BoardProps {
   columns: ColumnWithTasks[];
 }
 
 export const Board = ({ columns: defaultColums }: BoardProps) => {
+  const [isBrowser, setIsBrowser] = useState(false);
   const [columns, setColumns] = useState(defaultColums);
+  const [openNewColumnModal, setOpenNewColumnModal] = useState(false);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsBrowser(true);
+    }
+  }, []);
   const onDragEnd = async (result: DropResult) => {
     // dropped nowhere
     if (!result.destination) {
@@ -36,11 +49,11 @@ export const Board = ({ columns: defaultColums }: BoardProps) => {
       newColumns.splice(destination.index, 0, reorderedItem);
 
       setColumns(newColumns);
-      await updateColumnOrderAction(destination.index, source.index)
+      await updateColumnOrderAction(destination.index, source.index);
       return;
     }
 
-    if(result.type === "TASK"){
+    if (result.type === "TASK") {
       const sourceColumn = columns.find(
         (column) => column.title === source.droppableId
       );
@@ -48,7 +61,7 @@ export const Board = ({ columns: defaultColums }: BoardProps) => {
         (column) => column.title === destination.droppableId
       );
       if (!sourceColumn || !destinationColumn) {
-        return
+        return;
       }
       const sourceTasks = Array.from(sourceColumn.tasks);
       const [movedTask] = sourceTasks.splice(source.index, 1);
@@ -85,23 +98,48 @@ export const Board = ({ columns: defaultColums }: BoardProps) => {
       );
     }
   };
+  const toggleNewColumnModal = () => setOpenNewColumnModal(!openNewColumnModal);
+
+  const createNewColumn = async (title: string) => {
+    const newColumn = {
+      title,
+      order: columns.length,
+    };
+    const columnCreated = await createNewColumnAction(newColumn) as ColumnWithTasks
+    setColumns([...columns, columnCreated]);
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="board" type="COLUMN" direction="horizontal">
-        {(provided) => (
-          <div
-            className="bg-yellow-500 h-screen min-w-full inline-flex"
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {columns.map((column, index) => (
-              <Column key={`${column.id}`} column={column} index={index} />
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
+      <div>
+        {isBrowser ? (
+          <Droppable droppableId="board" type="COLUMN" direction="horizontal">
+            {(provided) => (
+              <div
+                className="bg-yellow-500 h-screen min-w-full inline-flex"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {columns.map((column, index) => (
+                  <Column key={`${column.id}`} column={column} index={index} />
+                ))}
+                <Button
+                  className="mt-2"
+                  onClick={() => setOpenNewColumnModal(true)}
+                >
+                  Create Column
+                </Button>
+                <NewColumnModal
+                  onCreate={createNewColumn}
+                  isOpen={openNewColumnModal}
+                  toggleModal={toggleNewColumnModal}
+                />
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        ) : null}
+      </div>
     </DragDropContext>
   );
 };

@@ -26,3 +26,10 @@ export const LoginSchema = z.object({
   })
 })
 
+export const NewColumnSchema = z.object({
+  title: z.string().min(1, {
+    message: "Title is required"
+  }),
+  order: z.number().optional()
+})
+

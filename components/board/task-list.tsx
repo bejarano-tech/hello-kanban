@@ -1,3 +1,4 @@
+"use client";
 import { Task } from "@prisma/client";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { TaskCard } from "./task-card";

@@ -5,6 +5,8 @@ export type ColumnWithTasks = Prisma.ColumnGetPayload<{
   include: { tasks: true };
 }>;
 
+export type ColumnType = Prisma.ColumnGetPayload<{}>;
+
 export const getColumns = async () => {
   try {
     const columns = await db.column.findMany({

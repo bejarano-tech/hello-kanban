@@ -1,6 +1,8 @@
 import { Board } from "@/components/board/board";
 import { getColumns } from "@/data/column";
 
+export const dynamic = 'force-dynamic'
+
 export default async function BoardPage() {
   const columns = await getColumns() || []
   return (
