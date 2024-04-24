@@ -7,14 +7,14 @@ interface TaskListProps {
   listId: string;
   listType: string;
   tasks: Task[];
-  internalScroll: boolean;
+  onDelete: (taskId: string) => Promise<void>
 }
 
 export const TaskList = ({
   listId,
   listType,
   tasks,
-  internalScroll,
+  onDelete
 }: TaskListProps) => {
   return (
     <Droppable
@@ -36,6 +36,7 @@ export const TaskList = ({
                   <Draggable key={task.id} draggableId={task.id} index={index}>
                     {(dragProvided, dragSnapshot) => (
                       <TaskCard
+                        onDelete={onDelete}
                         index={index}
                         key={task.id}
                         task={task}

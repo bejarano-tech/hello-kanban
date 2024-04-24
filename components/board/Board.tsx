@@ -121,7 +121,7 @@ export const Board = ({ columns: defaultColums }: BoardProps) => {
                 {...provided.droppableProps}
               >
                 {columns.map((column, index) => (
-                  <Column key={`${column.id}`} column={column} index={index} />
+                  <Column setColumns={setColumns} key={`${column.id}`} column={column} index={index} />
                 ))}
                 <Button
                   className="mt-2"

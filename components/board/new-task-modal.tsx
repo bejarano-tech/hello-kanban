@@ -5,31 +5,32 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NewColumnSchema } from "@/schemas";
+import { NewTaskSchema } from "@/schemas";
 
-interface NewColumnModalProps {
+interface NewTaskModalProps {
   isOpen: boolean;
   toggleModal: any;
-  onCreate: (arg0: string) => {};
+  onCreate: (values: z.infer<typeof NewTaskSchema>) => Promise<void>;
 }
 
-export const NewColumnModal = ({
+export const NewTaskModal = ({
   isOpen,
   toggleModal,
-  onCreate,
-}: NewColumnModalProps) => {
+  onCreate
+}: NewTaskModalProps) => {
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof NewColumnSchema>>({
-    resolver: zodResolver(NewColumnSchema),
+  const form = useForm<z.infer<typeof NewTaskSchema>>({
+    resolver: zodResolver(NewTaskSchema),
     defaultValues: {
-      title: "",
+      name: "",
+      description: ""
     },
   });
 
-  const onSubmit = (values: z.infer<typeof NewColumnSchema>) => {
+  const onSubmit = (values: z.infer<typeof NewTaskSchema>) => {
     startTransition(async () => {
-      onCreate(values.title);
+      onCreate(values);
       toggleModal();
       form.reset();
     });
@@ -44,7 +45,7 @@ export const NewColumnModal = ({
             <div className="space-y-4">
               <FormField
                 control={form.control}
-                name="title"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Title</FormLabel>
@@ -52,6 +53,22 @@ export const NewColumnModal = ({
                       <Input
                         {...field}
                         placeholder="New colum title"
+                        type="text"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="New task description"
                         type="text"
                       />
                     </FormControl>

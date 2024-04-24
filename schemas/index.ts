@@ -33,3 +33,13 @@ export const NewColumnSchema = z.object({
   order: z.number().optional()
 })
 
+export const NewTaskSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required"
+  }),
+  description: z.string().min(1, {
+    message: "Name is required"
+  }),
+  order: z.number().optional()
+})
+

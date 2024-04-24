@@ -2,12 +2,14 @@
 import { Task } from "@prisma/client";
 import { DraggableProvided } from "react-beautiful-dnd";
 import { Card } from "../ui/card";
+import { Button } from "../ui/button";
 
 interface TaskCardProps {
   task: Task;
   provided: DraggableProvided;
   isDragging: boolean;
   index: number;
+  onDelete: (taskId: string) => Promise<void>
 }
 
 export const TaskCard = ({
@@ -15,6 +17,7 @@ export const TaskCard = ({
   provided,
   isDragging,
   index,
+  onDelete
 }: TaskCardProps) => {
   return (
     <a
@@ -29,6 +32,7 @@ export const TaskCard = ({
       <Card className="flex flex-col grow-1 basis-full rounded p-4 mb-4">
         <h4>{task.name}</h4>
         <p>{task.description}</p>
+        <Button variant="link" onClick={() => onDelete(task.id)}>Delete</Button>
       </Card>
     </a>
   );

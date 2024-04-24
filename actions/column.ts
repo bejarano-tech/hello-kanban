@@ -16,3 +16,12 @@ export const createNewColumnAction = async (values: z.infer<typeof NewColumnSche
   const column = await db.column.create({data: {title, order: order || 0}, include: {tasks: true}})
   return column
 }
+
+export const deleteColumnAction = (id: string) => {
+  const deletedColumn = db.column.delete({
+    where: {
+      id
+    }
+  })
+  return deletedColumn
+}
