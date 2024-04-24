@@ -1,4 +1,4 @@
-import { Board } from "@/components/board/board";
+import { Board } from "@/components/board/board-component";
 import { getColumns } from "@/data/column";
 
 export const dynamic = 'force-dynamic'
