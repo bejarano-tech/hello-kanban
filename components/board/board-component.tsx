@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { NewColumnModal } from "@/components/board/new-column-modal";
 import { createNewColumnAction } from "@/actions/column";
-import { Column } from "@/components/board/column";
+import { Column } from "@/components/board/column-component";
 
 interface BoardProps {
   columns: ColumnWithTasks[];
