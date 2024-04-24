@@ -8,11 +8,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { login } from "@/actions/login";
+import { FormError } from "@/components/form-error";
+import { FormSuccess } from "@/components/form-success";
 
 export const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -25,7 +29,14 @@ export const LoginForm = () => {
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     startTransition(async () => {
       const response = await login(values);
-      console.log(response)
+      if (response?.error) {
+        form.reset();
+        setError(response.error);
+      }
+      if (response?.success) {
+        form.reset();
+        setSuccess(response?.success);
+      }
     });
   }
 
@@ -83,7 +94,8 @@ export const LoginForm = () => {
               )}
             />
           </div>
-          {/* TODO: Add FormSucess and FormError */}
+          <FormError message={error} />
+          <FormSuccess message={success} />
           <Button type="submit" className="w-full">
             Login
           </Button>
