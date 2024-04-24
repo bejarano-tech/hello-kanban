@@ -18,7 +18,7 @@ export const TaskCard = ({task, provided, isDragging, index}: TaskCardProps) => 
   data-index={index}
   aria-label={`task ${task.name}`}
 >
-  <div className="flex flex-col grow-1 basis-full">
+  <div className="flex flex-col grow-1 basis-full bg-white rounded p-4 mb-4">
     <div>{task.description}</div>
   </div>
 </a>

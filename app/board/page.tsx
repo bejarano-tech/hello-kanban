@@ -1,4 +1,4 @@
-import { Board } from "@/components/board/Board";
+import { Board } from "@/components/board/board";
 import { getColumns } from "@/data/column";
 
 export default async function BoardPage() {

@@ -1,6 +1,7 @@
+"use client"
 import { ColumnWithTasks } from "@/data/column";
 import { Draggable } from "react-beautiful-dnd";
-import { TaskList } from "./TaskList";
+import { TaskList } from "./task-list";
 
 interface ColumnProps {
   column: ColumnWithTasks;
@@ -8,14 +9,13 @@ interface ColumnProps {
 }
 export const Column = ({ column, index }: ColumnProps) => {
   return (
-    <Draggable key={index} draggableId={column.title} index={index}>
+    <Draggable key={index} draggableId={`${column.title}-draggableId`} index={index}>
       {(provided, snapshot) => (
         <div
           className="flex flex-col m-2"
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
-          {/* TODO: Change color on snapshot.isDragging */}
           <div className="flex items-center justify-center bg-gray-300">
             <h4
               className="p-2 select-none relative"

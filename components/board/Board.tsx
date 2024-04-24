@@ -1,16 +1,89 @@
 "use client";
 
 import { ColumnWithTasks } from "@/data/column";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { Column } from "./Column";
+import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
+import { Column } from "./column";
+import { useState } from "react";
+import { updateColumnOrderAction, updateTaskOrderAction } from "@/actions/order";
 
 interface BoardProps {
   columns: ColumnWithTasks[];
 }
 
-export const Board = ({ columns }: BoardProps) => {
-  const onDragEnd = () => {
-    console.log("onDragEnd");
+export const Board = ({ columns: defaultColums }: BoardProps) => {
+  const [columns, setColumns] = useState(defaultColums);
+  const onDragEnd = async (result: DropResult) => {
+    // dropped nowhere
+    if (!result.destination) {
+      return;
+    }
+
+    const source = result.source;
+    const destination = result.destination;
+
+    // did not move anywhere - can bail early
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+
+    // reordering column
+    if (result.type === "COLUMN") {
+      const newColumns = Array.from(columns);
+      const [reorderedItem] = newColumns.splice(source.index, 1);
+      newColumns.splice(destination.index, 0, reorderedItem);
+
+      setColumns(newColumns);
+      await updateColumnOrderAction(destination.index, source.index)
+      return;
+    }
+
+    if(result.type === "TASK"){
+      const sourceColumn = columns.find(
+        (column) => column.title === source.droppableId
+      );
+      const destinationColumn = columns.find(
+        (column) => column.title === destination.droppableId
+      );
+      if (!sourceColumn || !destinationColumn) {
+        return
+      }
+      const sourceTasks = Array.from(sourceColumn.tasks);
+      const [movedTask] = sourceTasks.splice(source.index, 1);
+      if (source.droppableId === destination.droppableId) {
+        // Moving within the same column
+        sourceTasks.splice(destination.index, 0, movedTask);
+        const newColumns = columns.map((column) => {
+          if (column.id === sourceColumn.id) {
+            return { ...column, tasks: sourceTasks };
+          }
+          return column;
+        });
+        setColumns(newColumns);
+      } else {
+        // Moving to a different column
+        const destinationTasks = Array.from(destinationColumn.tasks);
+        destinationTasks.splice(destination.index, 0, movedTask);
+        const newColumns = columns.map((column) => {
+          if (column.id === sourceColumn.id) {
+            return { ...column, tasks: sourceTasks };
+          } else if (column.id === destinationColumn.id) {
+            return { ...column, tasks: destinationTasks };
+          }
+          return column;
+        });
+        setColumns(newColumns);
+      }
+      await updateTaskOrderAction(
+        sourceColumn.id,
+        destinationColumn.id,
+        source.index,
+        destination.index,
+        movedTask.id
+      );
+    }
   };
 
   return (
@@ -23,7 +96,7 @@ export const Board = ({ columns }: BoardProps) => {
             {...provided.droppableProps}
           >
             {columns.map((column, index) => (
-              <Column key={`${index}-col`} column={column} index={index} />
+              <Column key={`${column.id}`} column={column} index={index} />
             ))}
             {provided.placeholder}
           </div>

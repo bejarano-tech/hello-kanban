@@ -1,6 +1,6 @@
 import { Task } from "@prisma/client";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import { TaskCard } from "./TaskCard";
+import { TaskCard } from "./task-card";
 
 interface TaskListProps {
   listId: string;
@@ -25,7 +25,7 @@ export const TaskList = ({
     >
       {(dropProvided, dropSnapshot) => (
         <div
-          className="flex flex-col p-2 border pb-0 select-none w-[250px]"
+          className="flex flex-col p-2 border pb-0 select-none w-[250px] bg-gray-300"
           {...dropProvided.droppableProps}
         >
           <div className="overflow-x-hidden overflow-y-auto max-h-[250px]">
