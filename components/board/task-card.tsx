@@ -1,8 +1,8 @@
 "use client";
 import { Task } from "@prisma/client";
 import { DraggableProvided } from "react-beautiful-dnd";
-import { Card } from "../ui/card";
-import { Button } from "../ui/button";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface TaskCardProps {
   task: Task;

@@ -1,6 +1,6 @@
 "use server";
 import { updateTaskOrder } from "@/data/task";
-import { updateColumnOrder } from "../data/column";
+import { updateColumnOrder } from "@/data/column";
 
 export const updateColumnOrderAction = async (
   destinationIndex: number,

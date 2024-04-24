@@ -2,15 +2,15 @@
 
 import { ColumnType, ColumnWithTasks } from "@/data/column";
 import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
-import { Column } from "./column";
 import { useEffect, useState } from "react";
 import {
   updateColumnOrderAction,
   updateTaskOrderAction,
 } from "@/actions/order";
-import { Button } from "../ui/button";
-import { NewColumnModal } from "./new-column-modal";
+import { Button } from "@/components/ui/button";
+import { NewColumnModal } from "@/components/board/new-column-modal";
 import { createNewColumnAction } from "@/actions/column";
+import { Column } from "@/components/board/column";
 
 interface BoardProps {
   columns: ColumnWithTasks[];
