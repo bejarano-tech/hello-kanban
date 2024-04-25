@@ -7,8 +7,10 @@ export default async function BoardPage() {
   const columns = await getColumns() || []
   return (
     <div>
-      <h1 className="text-center font-bold text-4xl my-8">Hello Kanban</h1>
+      <h1 className="ml-2 md:text-center font-bold my-8 text-2xl md:text-4xl">Hello Kanban</h1>
+      <div className="overflow-auto">
       <Board columns={columns} />
+      </div>
     </div>
   );
 }

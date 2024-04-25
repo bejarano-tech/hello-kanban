@@ -116,7 +116,7 @@ export const Board = ({ columns: defaultColums }: BoardProps) => {
           <Droppable droppableId="board" type="COLUMN" direction="horizontal">
             {(provided) => (
               <div
-                className="bg-yellow-500 h-screen min-w-full inline-flex"
+                className="bg-yellow-500 h-screen min-w-full inline-flex overflow-auto"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
